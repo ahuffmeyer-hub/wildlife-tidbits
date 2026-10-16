@@ -127,6 +127,7 @@
     $("hero-body").textContent = latest.tidbit;
     $("badge-k").textContent = `Episode ${latest.no}`;
     $("badge-v").textContent = latest.animal || "";
+    if (latest.image) $("hero-photo").classList.remove("disc-inner--logo");
     if (latest.image) $("hero-photo").innerHTML = `<img src="${esc(latest.image)}" alt="${esc(latest.animal || latest.title)}">`;
     $("play-btn").disabled = false;
     $("play-btn").addEventListener("click", () => playEp(current));
