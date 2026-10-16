@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f4fbf8;color:#0d1b3d;-webkit-font-smoothing:antialiased}
+a{color:#2f67d8}a:hover{color:#0d1b3d}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#f4fbf8;font-family:'Lexend',system-ui,sans-serif;color:#0d1b3d">
+  <header style="max-width:1240px;margin:0 auto;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img src="assets/logo-a.png" alt="Wildlife Tidbits" style="width:60px;height:60px;border-radius:50%;object-fit:cover;transform:scale(1.04)"></img>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:22px;font-weight:600;letter-spacing:-0.01em;line-height:1">Wildlife Tidbits</span>
+        <span style="font-size:11px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#2fa883">Listen. Learn. Love wildlife.</span>
+      </div>
+    </div>
+    <nav style="display:flex;gap:28px;align-items:center;flex-wrap:wrap;font-size:15px">
+      <a href="Wildlife Tidbits.dc.html" style="color:#2f67d8;text-decoration:none;font-weight:500">Home</a>
+      <a href="#library" style="color:#0d1b3d;text-decoration:none" style-hover="color:#2f67d8">Episodes</a>
+      <a href="About Us.dc.html" style="color:#0d1b3d;text-decoration:none">About</a>
+      <a href="#listen" style="background:#2f67d8;color:#fff;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:500" style-hover="background:#0d1b3d;color:#fff">Join the newsletter</a>
+    </nav>
+  </header>
+
+  <section style="max-width:1240px;margin:0 auto;padding:40px 32px 72px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:56px;align-items:center">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <span style="align-self:flex-start;font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#0d1b3d;background:#cff5e6;padding:8px 14px;border-radius:999px">This week's tidbit · {{ featured.habitat }}</span>
+      <h1 style="margin:0;font-size:clamp(40px,5.6vw,68px);line-height:1.04;font-weight:600;letter-spacing:-0.03em;text-wrap:balance">{{ featured.title }}</h1>
+      <p style="margin:0;font-size:20px;line-height:1.6;font-weight:300;color:#33405f;max-width:50ch;text-wrap:pretty">{{ featured.body }}</p>
+
+      <div style="display:flex;align-items:center;gap:16px;padding:14px 22px 14px 14px;background:#fff;border-radius:28px;box-shadow:0 1px 0 rgba(13,27,61,0.06),0 8px 24px rgba(13,27,61,0.06);max-width:540px">
+        <button onClick="{{ togglePlay }}" aria-label="Play episode" style="flex:none;width:56px;height:56px;border-radius:50%;border:none;background:#2f67d8;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#0d1b3d">{{ playGlyph }}</button>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#2fa883">{{ playerLabel }} · Ep. {{ episode.no }} · {{ episode.date }}</span>
+          <div style="display:flex;justify-content:space-between;gap:12px;font-size:14px">
+            <span style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ episode.title }}</span>
+            <span style="color:#6a7590;flex:none">{{ timeLabel }}</span>
+          </div>
+          <div style="height:6px;background:#e3f2ec;border-radius:999px;overflow:hidden">
+            <div style="height:100%;width:{{ progressPct }};background:#2fa883;border-radius:999px;transition:width .2s linear"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:14px;color:#6a7590">Listen on</span>
+        <a href="#" style="font-size:14px;font-weight:500;color:#0d1b3d;text-decoration:none;border:1.5px solid #c9dcd4;padding:9px 16px;border-radius:999px" style-hover="border-color:#2f67d8;color:#2f67d8">Spotify</a>
+        <a href="#" style="font-size:14px;font-weight:500;color:#0d1b3d;text-decoration:none;border:1.5px solid #c9dcd4;padding:9px 16px;border-radius:999px" style-hover="border-color:#2f67d8;color:#2f67d8">Apple Podcasts</a>
+        <a href="#" style="font-size:14px;font-weight:500;color:#0d1b3d;text-decoration:none;border:1.5px solid #c9dcd4;padding:9px 16px;border-radius:999px" style-hover="border-color:#2f67d8;color:#2f67d8">YouTube</a>
+      </div>
+      <a href="#library" style="align-self:flex-start;font-size:15px;font-weight:500;color:#2f67d8;text-decoration:none;padding:6px 0" style-hover="color:#0d1b3d">Browse all episodes ↓</a>
+    </div>
+
+    <sc-if value="{{ showImages }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative;aspect-ratio:1/1;max-width:540px;width:100%;justify-self:center">
+        <div style="position:absolute;inset:0;border-radius:50%;background:#cff5e6"></div>
+        <div style="position:absolute;inset:9%;border-radius:50%;overflow:hidden;background:repeating-linear-gradient(135deg,#bfe9d9 0 10px,#cff5e6 10px 20px);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#33405f;background:#f4fbf8;padding:6px 10px;border-radius:6px">photo: {{ featured.animal }}</span>
+        </div>
+        <div style="position:absolute;right:2%;bottom:8%;background:#0d1b3d;color:#fff;padding:12px 16px;border-radius:16px;display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#cff5e6">Episode {{ featured.no }}</span>
+          <span style="font-size:15px;font-weight:500">{{ featured.animal }}</span>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+
+  <section id="library" style="max-width:1240px;margin:0 auto;padding:0 32px 96px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:24px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 style="margin:0;font-size:36px;font-weight:600;letter-spacing:-0.02em">Podcast library</h2>
+        <span style="font-size:16px;font-weight:300;color:#6a7590">{{ countLabel }}</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+          <button onClick="{{ f.select }}" style="font-family:'Lexend',sans-serif;font-size:14px;font-weight:500;padding:9px 16px;border-radius:999px;border:1.5px solid {{ f.border }};background:{{ f.bg }};color:{{ f.fg }};cursor:pointer">{{ f.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ episodes }}" as="ep" hint-placeholder-count="8">
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:18px 24px 18px 18px;border-radius:24px;background:{{ ep.bg }};transition:background .2s" style-hover="background:#ffffff">
+          <button onClick="{{ ep.play }}" aria-label="Play episode" style="flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid #2f67d8;background:{{ ep.btnBg }};color:{{ ep.btnFg }};font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center">{{ ep.glyph }}</button>
+          <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#2fa883">Ep. {{ ep.no }} · {{ ep.date }}</span>
+            <span style="font-size:20px;font-weight:600;letter-spacing:-0.01em;line-height:1.25;text-wrap:balance">{{ ep.title }}</span>
+            <span style="font-size:15px;font-weight:300;color:#33405f;line-height:1.5;text-wrap:pretty">{{ ep.tidbit }}</span>
+          </div>
+          <div style="flex:none;display:flex;align-items:center;gap:14px">
+            <span style="font-size:13px;font-weight:500;background:#cff5e6;color:#0d1b3d;padding:6px 12px;border-radius:999px">{{ ep.habitat }}</span>
+            <span style="font-size:14px;color:#6a7590;min-width:44px;text-align:right">{{ ep.dur }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="listen" style="padding:0 20px 20px">
+    <div style="max-width:1240px;margin:0 auto;background:#0d1b3d;color:#fff;border-radius:32px;padding:56px clamp(24px,5vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:40px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#7fe0bd">The newsletter</span>
+        <h2 style="margin:0;font-size:clamp(30px,4vw,44px);font-weight:600;line-height:1.1;letter-spacing:-0.02em;text-wrap:balance">Wild facts, straight to your inbox.</h2>
+        <p style="margin:0;font-size:18px;font-weight:300;line-height:1.6;color:#c6cde0">One email a week: the new tidbit and the latest episode, the day it drops. Free, and you can unsubscribe anytime.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <form onSubmit="{{ subscribe }}" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="email" required placeholder="you@example.com" style="flex:1 1 220px;min-width:0;font-family:'Lexend',sans-serif;font-size:15px;padding:16px 20px;border-radius:999px;border:none;background:#fff;color:#0d1b3d;outline:none"></input>
+          <button type="submit" style="font-family:'Lexend',sans-serif;font-size:15px;font-weight:600;background:#cff5e6;color:#0d1b3d;border:none;padding:16px 24px;border-radius:999px;cursor:pointer" style-hover="background:#fff">{{ subLabel }}</button>
+        </form>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:14px;color:#c6cde0">Or listen on</span>
+          <a href="#" style="font-size:14px;color:#fff;text-decoration:none;border:1px solid #33416a;padding:10px 16px;border-radius:999px" style-hover="border-color:#cff5e6;color:#cff5e6">Apple Podcasts</a>
+          <a href="#" style="font-size:14px;color:#fff;text-decoration:none;border:1px solid #33416a;padding:10px 16px;border-radius:999px" style-hover="border-color:#cff5e6;color:#cff5e6">Spotify</a>
+          <a href="#" style="font-size:14px;color:#fff;text-decoration:none;border:1px solid #33416a;padding:10px 16px;border-radius:999px" style-hover="border-color:#cff5e6;color:#cff5e6">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="max-width:1240px;margin:0 auto;padding:28px 32px 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:#6a7590">
+    <span>© 2026 Wildlife Tidbits</span>
+    <span style="letter-spacing:0.16em;text-transform:uppercase;font-size:12px;font-weight:500;color:#2fa883">Listen. Learn. Love wildlife.</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showImages&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const EPISODES = [
+  {no:42,date:'Oct 14',habitat:'Grassland',animal:'African elephant',title:'Why elephants listen with their feet',tidbit:'Elephants pick up low rumbles through sensitive pads in their feet — sometimes from kilometres away.',body:'Low rumbles travel through the ground, and elephants pick them up through sensitive pads in their feet — sometimes from kilometres away.',len:754},
+  {no:41,date:'Oct 7',habitat:'Ocean',animal:'Common octopus',title:'Tasting the world with eight arms',tidbit:'Each sucker carries thousands of chemical receptors, so an octopus can taste a crab before it sees it.',len:812},
+  {no:40,date:'Sep 30',habitat:'Forest',animal:'New Caledonian crow',title:'The crow that builds its own tools',tidbit:'These crows bend twigs into hooks to fish grubs out of dead wood — and teach their young.',len:698},
+  {no:39,date:'Sep 23',habitat:'Forest',animal:'Wood frog',title:'Frozen solid, alive in spring',tidbit:'A wood frog’s heart stops all winter. Sugar protects its cells until the thaw.',len:731},
+  {no:38,date:'Sep 16',habitat:'Sky',animal:'Bar-tailed godwit',title:'Eleven days in the air',tidbit:'One godwit flew 13,560 km from Alaska to Tasmania without a single stop.',len:845},
+  {no:37,date:'Sep 9',habitat:'Deep sea',animal:'Anglerfish',title:'A lantern full of borrowed light',tidbit:'The anglerfish’s glowing lure is powered by bacteria living inside it.',len:676},
+  {no:36,date:'Sep 2',habitat:'Ocean',animal:'Sea otter',title:'Holding hands at bedtime',tidbit:'Sea otters link paws or wrap up in kelp so they don’t drift apart while sleeping.',len:702},
+  {no:35,date:'Aug 26',habitat:'Grassland',animal:'Wombat',title:'The mystery of the cube',tidbit:'Wombat droppings come out cube-shaped, so they stack without rolling away.',len:759}
+];
+const HABITATS = ['All','Ocean','Forest','Grassland','Sky','Deep sea'];
+
+class Component extends DCLogic {
+  state = { current: 0, filter: 'All', playing: false, t: 0, subbed: false };
+  componentWillUnmount(){ clearInterval(this.timer); }
+  start(){ clearInterval(this.timer); this.setState({playing:true}); this.timer = setInterval(() => this.setState(s => s.t >= EPISODES[s.current].len ? (clearInterval(this.timer), {playing:false,t:0}) : {t:s.t+1}), 1000); }
+  stop(){ clearInterval(this.timer); this.setState({playing:false}); }
+  togglePlay = () => this.state.playing ? this.stop() : this.start();
+  playEp = i => {
+    if (i === this.state.current) return this.togglePlay();
+    this.setState({current:i, t:0}, () => this.start());
+  };
+  renderVals() {
+    const { current, filter, playing, t, subbed } = this.state;
+    const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    const ep = EPISODES[current];
+    const latest = EPISODES[0];
+    const list = EPISODES.map((e,i)=>({e,i})).filter(({e}) => filter==='All' || e.habitat===filter);
+    return {
+      showImages: this.props.showImages ?? true,
+      featured: { no: latest.no, habitat: latest.habitat, animal: latest.animal, title: latest.title.replace(/^Why /,'').replace(/^./,c=>c.toUpperCase()) + '.', body: latest.body },
+      episode: ep,
+      playerLabel: current===0 ? 'Latest episode' : 'Now playing',
+      playGlyph: playing ? '❚❚' : '▶',
+      timeLabel: `${fmt(t)} / ${fmt(ep.len)}`,
+      progressPct: `${(t/ep.len)*100}%`,
+      togglePlay: this.togglePlay,
+      countLabel: `${list.length} episode${list.length===1?'':'s'} · new every week`,
+      filters: HABITATS.map(h => {
+        const a = h===filter;
+        return { label: h, bg: a?'#0d1b3d':'transparent', fg: a?'#fff':'#0d1b3d', border: a?'#0d1b3d':'#c9dcd4', select: () => this.setState({filter:h}) };
+      }),
+      episodes: list.map(({e,i}) => {
+        const on = i===current && playing, cur = i===current;
+        return { ...e, dur: fmt(e.len), glyph: on?'❚❚':'▶', btnBg: cur?'#2f67d8':'transparent', btnFg: cur?'#fff':'#2f67d8', bg: cur?'#ffffff':'#eaf6f1', play: () => this.playEp(i) };
+      }),
+      subLabel: subbed ? 'You’re in ✓' : 'Subscribe',
+      subscribe: e => { e.preventDefault(); this.setState({subbed:true}); }
+    };
+  }
+}
+</script>
+</body>
+</html>
