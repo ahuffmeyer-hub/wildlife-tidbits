@@ -215,6 +215,9 @@ img { display: block; }
 .press { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
 .press .eyebrow { color: var(--muted); }
 .press-list { display: flex; gap: 10px 22px; flex-wrap: wrap; justify-content: center; font-size: 18px; font-weight: 600; }
+.press-list a { color: var(--ink); text-decoration: none; border-bottom: 1.5px solid var(--border); transition: color .2s, border-color .2s; }
+.press-list a::after { content: " ↗"; font-weight: 400; color: var(--blue); }
+.press-list a:hover, .press-list a:focus-visible { color: var(--blue); border-bottom-color: var(--blue); }
 .outline-btn {
   align-self: center; font-size: 15px; font-weight: 500; color: var(--ink); text-decoration: none;
   border: 1.5px solid var(--border); padding: 11px 18px; border-radius: 999px;
